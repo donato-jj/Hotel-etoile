@@ -1,163 +1,178 @@
-/* ===== RESET ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-/* ===== GENERAL ===== */
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    color: #4a3b2a;
-    background-color: #f7f3ee;
-    line-height: 1.6;
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Conejo Te Observa</title>
 
-.container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 40px 20px;
-}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
 
-/* ===== HEADER ===== */
-.header {
-    background-color: #efe6d8;
-    border-bottom: 1px solid #d6c6ad;
-}
+        body {
+            background: #000;
+            overflow: hidden;
+        }
 
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: url('conejo.jpg') center/cover no-repeat;
+            filter: blur(3px) brightness(0.8);
+            z-index: -1;
+        }
 
-.logo {
-    font-size: 28px;
-    color: #6b4e2e;
-}
+        .container {
+            position: absolute;
+            width: 100%;
+            top: 5vh;
+            text-align: center;
+            color: white;
+        }
 
-.nav a {
-    margin-left: 20px;
-    text-decoration: none;
-    color: #6b4e2e;
-    font-weight: 500;
-}
+        .rabbit {
+            width: 250px;
+            height: 350px;
+            margin: 0 auto 20px;
+            background: url('conejo.jpg') center/cover no-repeat;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255,0,0,0.4);
+            filter: drop-shadow(0px 0px 10px rgba(255,0,0,0.3));
+            transition: .4s;
+        }
 
-.nav a:hover {
-    color: #a67c52;
-}
+        .rabbit:hover {
+            scale: 1.03;
+            filter: drop-shadow(0px 0px 20px rgba(255,0,0,0.6));
+        }
 
-/* ===== HERO ===== */
-.hero {
-    background-image: url('fachada.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 70vh;
-    position: relative;
-}
+        .title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px red;
+        }
 
-.hero-overlay {
-    background-color: rgba(0,0,0,0.45);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: #fff;
-}
+        .log {
+            width: 80%;
+            height: 40vh;
+            margin: 10px auto;
+            padding: 15px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+            overflow-y: auto;
+        }
 
-.hero-overlay h2 {
-    font-size: 42px;
-    margin-bottom: 10px;
-}
+        .log p {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
 
-.hero-overlay p {
-    font-size: 20px;
-}
+        .input-area {
+            margin-top: 15px;
+        }
 
-/* ===== SECTIONS ===== */
-.section {
-    background-color: #ffffff;
-}
+        input {
+            padding: 12px;
+            width: 60%;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
 
-.hotel-section {
-    display: flex;
-    gap: 40px;
-    align-items: center;
-}
+        button {
+            padding: 12px 20px;
+            margin-left: 10px;
+            background: red;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
 
-.hotel-section img {
-    width: 50%;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
+        button:hover {
+            background: #ff5555;
+        }
+    </style>
+</head>
+<body>
 
-.hotel-text h3 {
-    font-size: 30px;
-    margin-bottom: 15px;
-    color: #6b4e2e;
-}
+<div class="overlay"></div>
 
-/* ===== LOCATION ===== */
-.location {
-    background-color: #f3eadc;
-    text-align: center;
-}
+<div class="container">
+    <div class="rabbit"></div>
 
-.location h3 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
+    <h1 class="title">El Conejo Te Escucha</h1>
 
-/* ===== CONTACT ===== */
-.contact {
-    text-align: center;
-}
+    <div class="log" id="log"></div>
 
-.contact h3 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
+    <div class="input-area">
+        <input type="text" id="question" placeholder="Pregúntale algo al conejo..." autocomplete="off">
+        <button onclick="processQuestion()">Enviar</button>
+    </div>
+</div>
 
-.phone {
-    font-size: 22px;
-    margin-bottom: 20px;
-}
+<script>
+    let memory = [];
 
-.call-button {
-    display: inline-block;
-    padding: 12px 25px;
-    background-color: #a67c52;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: bold;
-}
+    const patterns = [
+        "Eso ya lo sabías antes de preguntarlo, ¿no?",
+        "Curiosa elección de palabras… vuelve a leerlas.",
+        "A veces la respuesta está en el silencio.",
+        "Yo recuerdo más de lo que digo, pero digo menos de lo que sé.",
+        "¿Por qué preguntas algo que parece que temes saber?"
+    ];
 
-.call-button:hover {
-    background-color: #8b623d;
-}
+    function generateResponse(question) {
+        memory.push(question);
 
-/* ===== FOOTER ===== */
-.footer {
-    background-color: #6b4e2e;
-    color: #fff;
-    text-align: center;
-    padding: 25px 10px;
-}
+        let keyword = question.split(" ")[0];
+        let pattern = patterns[Math.floor(Math.random()*patterns.length)];
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-    .hotel-section {
-        flex-direction: column;
+        return `Hmmm… ${keyword}… interesante. ${pattern}`;
     }
 
-    .hotel-section img {
-        width: 100%;
+    function processQuestion() {
+        const q = document.getElementById("question");
+        const log = document.getElementById("log");
+
+        if (!q.value.trim()) return;
+
+        log.innerHTML += `<p><strong>Tú:</strong> ${q.value}</p>`;
+
+        let response = generateResponse(q.value);
+        log.innerHTML += `<p><strong>Conejo:</strong> ${response}</p>`;
+
+        speak(response);
+
+        q.value = "";
+        log.scrollTop = log.scrollHeight;
     }
 
-    .nav {
-        display: none;
+    function speak(text) {
+        let msg = new SpeechSynthesisUtterance(text);
+        msg.pitch = 0.7;
+        msg.rate = 0.9;
+        msg.volume = 0.8;
+        msg.voice = speechSynthesis.getVoices().find(v => v.lang.includes("es"));
+        speechSynthesis.speak(msg);
     }
-}
+
+    // Fix para voces en algunos navegadores
+    setTimeout(() => {
+        speechSynthesis.getVoices();
+    }, 1000);
+</script>
+
+</body>
+</html>
