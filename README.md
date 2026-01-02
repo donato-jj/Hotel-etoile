@@ -1,243 +1,177 @@
-# Hotel-etoile
-Hotel etoile bienvenidos 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Etoile | Mar del Plata</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>El Conejo Te Observa</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: url('conejo.jpg') center/cover no-repeat;
+            filter: blur(3px) brightness(0.8);
+            z-index: -1;
+        }
+
+        .container {
+            position: absolute;
+            width: 100%;
+            top: 5vh;
+            text-align: center;
+            color: white;
+        }
+
+        .rabbit {
+            width: 250px;
+            height: 350px;
+            margin: 0 auto 20px;
+            background: url('conejo.jpg') center/cover no-repeat;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255,0,0,0.4);
+            filter: drop-shadow(0px 0px 10px rgba(255,0,0,0.3));
+            transition: .4s;
+        }
+
+        .rabbit:hover {
+            scale: 1.03;
+            filter: drop-shadow(0px 0px 20px rgba(255,0,0,0.6));
+        }
+
+        .title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px red;
+        }
+
+        .log {
+            width: 80%;
+            height: 40vh;
+            margin: 10px auto;
+            padding: 15px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+            overflow-y: auto;
+        }
+
+        .log p {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+
+        .input-area {
+            margin-top: 15px;
+        }
+
+        input {
+            padding: 12px;
+            width: 60%;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin-left: 10px;
+            background: red;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #ff5555;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- ===== HEADER ===== -->
-    <header class="header">
-        <div class="container header-content">
-            <h1 class="logo">Hotel Etoile</h1>
-            <nav class="nav">
-                <a href="#inicio">Inicio</a>
-                <a href="#hotel">El Hotel</a>
-                <a href="#ubicacion">Ubicación</a>
-                <a href="#contacto">Contacto</a>
-            </nav>
-        </div>
-    </header>
+<div class="overlay"></div>
 
-    <!-- ===== HERO ===== -->
-    <section class="hero" id="inicio">
-        <div class="hero-overlay">
-            <h2>Hotel Etoile</h2>
-            <p>Confort y elegancia en Mar del Plata</p>
-        </div>
-    </section>
+<div class="container">
+    <div class="rabbit"></div>
 
-    <!-- ===== EL HOTEL ===== -->
-    <section class="section" id="hotel">
-        <div class="container hotel-section">
-            <img src="recepcion.jpg" alt="Recepción Hotel Etoile">
-            <div class="hotel-text">
-                <h3>El Hotel</h3>
-                <p>
-                    Hotel Etoile ofrece un ambiente cálido y elegante, ideal para quienes buscan
-                    comodidad, tranquilidad y una atención personalizada. Ubicado estratégicamente
-                    en Mar del Plata, es una excelente opción tanto para viajes de descanso como de trabajo.
-                </p>
-                <p>
-                    Nuestro compromiso es brindar una experiencia confortable, con espacios cuidados
-                    y un servicio atento que haga sentir a cada huésped como en casa.
-                </p>
-            </div>
-        </div>
-    </section>
+    <h1 class="title">El Conejo Te Escucha</h1>
 
-    <!-- ===== UBICACIÓN ===== -->
-    <section class="section location" id="ubicacion">
-        <div class="container">
-            <h3>Ubicación</h3>
-            <p>📍 Santiago del Estero 1869</p>
-            <p>Mar del Plata, Argentina</p>
-        </div>
-    </section>
+    <div class="log" id="log"></div>
 
-    <!-- ===== CONTACTO ===== -->
-    <section class="section contact" id="contacto">
-        <div class="container">
-            <h3>Contacto</h3>
-            <p class="phone">📞 0223 493-4968</p>
-            <a href="tel:02234934968" class="call-button">Llamar ahora</a>
-        </div>
-    </section>
+    <div class="input-area">
+        <input type="text" id="question" placeholder="Pregúntale algo al conejo..." autocomplete="off">
+        <button onclick="processQuestion()">Enviar</button>
+    </div>
+</div>
 
-    <!-- ===== FOOTER ===== -->
-    <footer class="footer">
-        <p><strong>Hotel Etoile</strong></p>
-        <p>Santiago del Estero 1869</p>
-        <p>Tel: 0223 493-4968</p>
-        <p>Mar del Plata – Argentina</p>
-    </footer>
+<script>
+    let memory = [];
+
+    const patterns = [
+        "Eso ya lo sabías antes de preguntarlo, ¿no?",
+        "Curiosa elección de palabras… vuelve a leerlas.",
+        "A veces la respuesta está en el silencio.",
+        "Yo recuerdo más de lo que digo, pero digo menos de lo que sé.",
+        "¿Por qué preguntas algo que parece que temes saber?"
+    ];
+
+    function generateResponse(question) {
+        memory.push(question);
+
+        let keyword = question.split(" ")[0];
+        let pattern = patterns[Math.floor(Math.random()*patterns.length)];
+
+        return `Hmmm… ${keyword}… interesante. ${pattern}`;
+    }
+
+    function processQuestion() {
+        const q = document.getElementById("question");
+        const log = document.getElementById("log");
+
+        if (!q.value.trim()) return;
+
+        log.innerHTML += `<p><strong>Tú:</strong> ${q.value}</p>`;
+
+        let response = generateResponse(q.value);
+        log.innerHTML += `<p><strong>Conejo:</strong> ${response}</p>`;
+
+        speak(response);
+
+        q.value = "";
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function speak(text) {
+        let msg = new SpeechSynthesisUtterance(text);
+        msg.pitch = 0.7;
+        msg.rate = 0.9;
+        msg.volume = 0.8;
+        msg.voice = speechSynthesis.getVoices().find(v => v.lang.includes("es"));
+        speechSynthesis.speak(msg);
+    }
+
+    // Fix para voces en algunos navegadores
+    setTimeout(() => {
+        speechSynthesis.getVoices();
+    }, 1000);
+</script>
 
 </body>
 </html>
-/* ===== RESET ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* ===== GENERAL ===== */
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    color: #4a3b2a;
-    background-color: #f7f3ee;
-    line-height: 1.6;
-}
-
-.container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 40px 20px;
-}
-
-/* ===== HEADER ===== */
-.header {
-    background-color: #efe6d8;
-    border-bottom: 1px solid #d6c6ad;
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    font-size: 28px;
-    color: #6b4e2e;
-}
-
-.nav a {
-    margin-left: 20px;
-    text-decoration: none;
-    color: #6b4e2e;
-    font-weight: 500;
-}
-
-.nav a:hover {
-    color: #a67c52;
-}
-
-/* ===== HERO ===== */
-.hero {
-    background-image: url('fachada.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 70vh;
-    position: relative;
-}
-
-.hero-overlay {
-    background-color: rgba(0,0,0,0.45);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: #fff;
-}
-
-.hero-overlay h2 {
-    font-size: 42px;
-    margin-bottom: 10px;
-}
-
-.hero-overlay p {
-    font-size: 20px;
-}
-
-/* ===== SECTIONS ===== */
-.section {
-    background-color: #ffffff;
-}
-
-.hotel-section {
-    display: flex;
-    gap: 40px;
-    align-items: center;
-}
-
-.hotel-section img {
-    width: 50%;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-
-.hotel-text h3 {
-    font-size: 30px;
-    margin-bottom: 15px;
-    color: #6b4e2e;
-}
-
-/* ===== LOCATION ===== */
-.location {
-    background-color: #f3eadc;
-    text-align: center;
-}
-
-.location h3 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-/* ===== CONTACT ===== */
-.contact {
-    text-align: center;
-}
-
-.contact h3 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-.phone {
-    font-size: 22px;
-    margin-bottom: 20px;
-}
-
-.call-button {
-    display: inline-block;
-    padding: 12px 25px;
-    background-color: #a67c52;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: bold;
-}
-
-.call-button:hover {
-    background-color: #8b623d;
-}
-
-/* ===== FOOTER ===== */
-.footer {
-    background-color: #6b4e2e;
-    color: #fff;
-    text-align: center;
-    padding: 25px 10px;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-    .hotel-section {
-        flex-direction: column;
-    }
-
-    .hotel-section img {
-        width: 100%;
-    }
-
-    .nav {
-        display: none;
-    }
-}
